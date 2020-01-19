@@ -35,7 +35,7 @@ app.use(flash());
 
 
 //hablilitar ejs (Templete Engine son como 20 que hay)
- //app.set('view engine', 'ejs');
+ app.set('view engine', 'ejs');
 
 
 

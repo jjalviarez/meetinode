@@ -20,7 +20,7 @@ module.exports = () => {
 
      //Ruta de home
     route.get('/', (req, res) => {
-        res.send('home');
+        res.render('home');
     } );
 
     
