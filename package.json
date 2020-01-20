@@ -36,6 +36,7 @@
     "nodemailer": "^6.4.2",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
+    "pg": "^7.17.1",
     "shortid": "^2.2.15",
     "slug": "^2.1.0",
     "sweetalert2": "^9.6.0",

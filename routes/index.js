@@ -7,6 +7,7 @@ const route = express.Router();
 
 const usuariosController = require("../controllers/usuariosController");
 const authController = require("../controllers/authController");
+const homeController = require("../controllers/homeController");
 
 
 
@@ -19,19 +20,15 @@ module.exports = () => {
     
 
      //Ruta de home
-    route.get('/', (req, res) => {
-        res.render('home');
-    } );
+    route.get('/', homeController.home );
 
     
 
-/*
-    //crear Cuenta
     //Crear Nueva Cuenta
     route.get('/crear-cuenta',usuariosController.formCrearCuenta);
-    route.post('/crear-cuenta',usuariosController.validarregistro,usuariosController.crearCuenta);
+    route.post('/crear-cuenta',/*usuariosController.validarregistro,*/usuariosController.crearCuenta);
     
-    
+/*    
     //Iniciar Sesion
     route.get('/iniciar-sesion',usuariosController.forminiciarSesion);
     route.post('/iniciar-sesion',authController.autenticarUsuario);

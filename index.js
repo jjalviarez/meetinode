@@ -1,6 +1,3 @@
-//conexion con la BD
-
-require("./config/db");
 
 
 const express = require('express');
@@ -16,14 +13,24 @@ const passport = require('./config/passport');
 var expressLayouts = require('express-ejs-layouts');
 
 
+//conexion con la BD
+const db = require("./config/db");
+//Modelos
+//require("./models/Usuarios");
+
+db.sync()
+    .then(()=> console.log('DB conectada'))
+    .catch((error)=>console.log(error));
+
+
+
+
 //crear un app en express
 const app = express();
 
 //Se habilita el bodyParser para los req de datos
 app.use(bodyParser.urlencoded({extended: false }));
 app.use(bodyParser.json());
-
-
 
 //Carpeta de archivos estaticos
 // static files

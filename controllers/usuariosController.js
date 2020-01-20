@@ -9,11 +9,10 @@ const { body, sanitizeBody, validationResult } = require('express-validator');
 
 
 
-/*
+
 exports.formCrearCuenta = (req,res) => {
-    res.render('crearCuenta', {
+    res.render('crear-cuenta', {
         nombrePagina: 'Crear Cuenta',
-        tagline: 'Publica ahora',
     });
 };
 
@@ -22,6 +21,7 @@ exports.formCrearCuenta = (req,res) => {
 
 
 exports.crearCuenta = async (req,res,next) => {
+    /*
     const {email, password, nombre, confirmar} = req.body;
     try {
         await Usuario.create(req.body);
@@ -54,9 +54,10 @@ exports.crearCuenta = async (req,res,next) => {
                 confirmar
         });
     }
+    */
 };
 
-
+/*
 exports.validarregistro = async  (req,res,next) => {
     const {email, password, nombre, confirmar} = req.body;
     const rules = [
