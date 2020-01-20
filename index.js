@@ -13,6 +13,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const createError = require('http-errors');
 const passport = require('./config/passport');
+var expressLayouts = require('express-ejs-layouts');
 
 
 //crear un app en express
@@ -35,8 +36,8 @@ app.use(flash());
 
 
 //hablilitar ejs (Templete Engine son como 20 que hay)
- app.set('view engine', 'ejs');
-
+app.use(expressLayouts);
+app.set('view engine', 'ejs');
 
 
 //habilitar cookieParser
@@ -57,6 +58,8 @@ app.use(passport.session());
 //declaraciones de los middleware
 app.use((req, res, next) => {
     res.locals.mensajes = req.flash();
+    const fecha = new Date();
+    res.locals.year  = fecha.getFullYear();
     //res.locals.usuario = {...req.user} || null;
     next(); 
 });
