@@ -8,6 +8,7 @@ const route = express.Router();
 const usuariosController = require("../controllers/usuariosController");
 const authController = require("../controllers/authController");
 const homeController = require("../controllers/homeController");
+const adminController = require("../controllers/adminController");
 
 
 
@@ -26,14 +27,14 @@ module.exports = () => {
 
     //Crear Nueva Cuenta
     route.get('/crear-cuenta',usuariosController.formCrearCuenta);
-    route.post('/crear-cuenta',/*usuariosController.validarregistro,*/usuariosController.crearCuenta);
+    route.post('/crear-cuenta',usuariosController.validarregistro,usuariosController.crearCuenta);
     
-/*    
+    
     //Iniciar Sesion
     route.get('/iniciar-sesion',usuariosController.forminiciarSesion);
     route.post('/iniciar-sesion',authController.autenticarUsuario);
-    //route.get('/iniciar-sesion/:token',usuariosController.activarCuenta);
-    
+    route.get('/iniciar-sesion/:token',usuariosController.activarCuenta);
+/*    
     //Creat Token para cambio de  Contraseña 
     route.get('/restablecer', usuariosController.formRestablecerPassword);
     route.post('/restablecer', authController.enviarToken); 
@@ -45,9 +46,11 @@ module.exports = () => {
     
      //Cerrar sesion
     route.get('/logout', authController.usuarioAutenticado, authController.cerrarSesion);
-    
+*/
+
     //sitio de administracion
-    route.get('/administracion',authController.usuarioAutenticado,authController.mostrarPanel);
+    route.get('/administracion',authController.usuarioAutenticado,adminController.mostrarPanel);
+/*
     //editar Perfil
     route.get('/editar-perfil',authController.usuarioAutenticado,usuariosController.formEditarPerfil);
     route.post('/editar-perfil',

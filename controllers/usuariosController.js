@@ -1,17 +1,18 @@
-/*
-const mongoose = require('mongoose');
-const Usuario = mongoose.model('Usuario');
+
 const multer  = require('multer');
 const shortid = require('shortid');
 const uuidv1 = require('uuid/v1');
-const { body, sanitizeBody, validationResult } = require('express-validator');
-*/
+const { body, validationResult, sanitizeBody } = require('express-validator');
+
+const Usuarios = require("../models/Usuarios");
+const crypto = require('crypto');
+const enviarEmail = require("../handlers/email");
 
 
 
 
 exports.formCrearCuenta = (req,res) => {
-    res.render('crear-cuenta', {
+    res.render('crearCuenta', {
         nombrePagina: 'Crear Cuenta',
     });
 };
@@ -21,17 +22,18 @@ exports.formCrearCuenta = (req,res) => {
 
 
 exports.crearCuenta = async (req,res,next) => {
-    /*
-    const {email, password, nombre, confirmar} = req.body;
+    const {nombre, email, password } = req.body;
+    
     try {
-        await Usuario.create(req.body);
+        
+        const token = crypto.randomBytes(20).toString('hex');
+        await Usuarios.create({nombre,email,password,token});
         
         //Enviar correo
         
-        //const url= 'https://' + req.headers.host + "/iniciar-sesion/" + token;
+        const url= 'https://' + req.headers.host + "/iniciar-sesion/" + token;
         
         //Enviar el correo
-        
         await enviarEmail.enviar({
             usuario: {email},
             url, 
@@ -40,31 +42,30 @@ exports.crearCuenta = async (req,res,next) => {
         });
         
         
-        //req.flash('correcto', 'Se envio un mensaje a tu correo Para Activar Tu cuenta');
+        req.flash('correcto', 'Se envio un mensaje a tu correo Para Activar Tu cuenta');
         res.redirect('/iniciar-sesion');
     } catch (error) {
-        req.flash('error', error);
+        const err= error.errors.map(error => error.message);
+        req.flash('error',err );
+        //console.log(error);
         res.render('crearCuenta', {
-                mensajes: req.flash(),
-                nombrePagina: 'Crear Cuenta',
-                tagline: 'Publica ahora',
-                email, 
-                password,
-                nombre,
-                confirmar
+            mensajes: req.flash(),
+            nombrePagina: 'Crear Cuenta',
+            nombre,
+            email, 
+            password
         });
+        
+        
     }
-    */
 };
 
-/*
+
 exports.validarregistro = async  (req,res,next) => {
     const {email, password, nombre, confirmar} = req.body;
     const rules = [
         sanitizeBody('nombre').escape().run(req),
         sanitizeBody('email').escape().run(req),
-        sanitizeBody('password').escape().run(req),
-        sanitizeBody('confirmar').escape().run(req),
         body('nombre','El nombre es Obligatorio').notEmpty().run(req),
         body('email','El email debe ser valido').isEmail().run(req),
         body('password','El password no puede ir vacío').notEmpty().run(req),
@@ -73,8 +74,6 @@ exports.validarregistro = async  (req,res,next) => {
     ];
     await Promise.all(rules);
     const errores = validationResult(req);
-    //console.log(errores);
-    //res.send(errores);
     if(errores.isEmpty()){
         return next();
     }
@@ -82,7 +81,6 @@ exports.validarregistro = async  (req,res,next) => {
     res.render('crearCuenta', {
             mensajes: req.flash(),
             nombrePagina: 'Crear Cuenta',
-            tagline: 'Publica ahora',
             email, 
             password,
             nombre,
@@ -96,21 +94,22 @@ exports.validarregistro = async  (req,res,next) => {
 exports.forminiciarSesion = (req,res) => {
     
     res.render('iniciarSesion', {
-        nombrePagina: 'Iniciar Sesion',
-        tagline: 'ingresa  ahora'
+        nombrePagina: 'Iniciar Sesion'
     });
 };
 
 
 
 
-
+/*
 exports.formRestablecerPassword = (req,res) => {
     res.render('restablecer', {
         nombrePagina: 'Restablecer Contraseña',
         tagline: 'ingresa  tu correo'
     });
 };
+*/
+
 
 
 
@@ -123,7 +122,7 @@ exports.activarCuenta = async (req,res) =>{
     });
     
     if(!usuario) {
-        req.flash('error', 'No existe Ceunta');
+        req.flash('error', 'No existe esa Ceunta');
         return res.redirect("/crear-cuenta");
     }
     else {
@@ -141,7 +140,7 @@ exports.activarCuenta = async (req,res) =>{
 
 
 
-
+/*
 exports.formEditarPerfil = async (req,res,next) => {
     res.render("editar-perfil", {
         nombrePagina: req.user.nombre,

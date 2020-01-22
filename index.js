@@ -11,15 +11,18 @@ const session = require('express-session');
 const createError = require('http-errors');
 const passport = require('./config/passport');
 var expressLayouts = require('express-ejs-layouts');
+const SessionStore = require('express-session-sequelize')(session.Store);
+ 
+
 
 
 //conexion con la BD
 const db = require("./config/db");
 //Modelos
-//require("./models/Usuarios");
+require("./models/Usuarios");
 
 db.sync()
-    .then(()=> console.log('DB conectada'))
+    //.then(()=> console.log('DB conectada'))
     .catch((error)=>console.log(error));
 
 
@@ -38,8 +41,6 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 //agregra la caprteta de las vistas 
 app.set('views',path.join(__dirname, './views'));
-//habilitar flash Menssages
-app.use(flash());
 
 
 //hablilitar ejs (Templete Engine son como 20 que hay)
@@ -50,12 +51,17 @@ app.set('view engine', 'ejs');
 //habilitar cookieParser
 app.use(cookieParser());
 
+//habilitar flash Menssages
+app.use(flash());
+
+
 //habilitar session
 app.use(session({
   secret: process.env.SECRETO,
   key: process.env.KEY,
+  store: new SessionStore({ db }),
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: false
 }))
 
 //Inicializar passport
@@ -64,6 +70,7 @@ app.use(passport.session());
 
 //declaraciones de los middleware
 app.use((req, res, next) => {
+    //console.log(req.headers.host);
     res.locals.mensajes = req.flash();
     const fecha = new Date();
     res.locals.year  = fecha.getFullYear();

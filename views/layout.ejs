@@ -23,6 +23,19 @@
             <a href="/crear-cuenta">Crear Cuenta</a>
         </nav>
     </header>
+    
+    
+    <% if (mensajes) { %>
+            <div id="alertas" class="alertas">
+                <% Object.keys(mensajes).forEach(categoria =>{ %>
+        	        <% mensajes[categoria].forEach(texto => { %>
+        		        <%- '<p class="alerta ' + categoria + '">' + texto + '</p>' %>
+        	        <% }) %>
+        <% }) %>    
+            </div>
+    <% } %>
+    
+    
     <%- body %>
     
     

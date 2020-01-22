@@ -1,15 +1,12 @@
-/*
-//Referencia al modelo donde vamos a autenticar
-const mongoose = require('mongoose');
-const Usuario = mongoose.model('Usuario');
-const Vacante = mongoose.model('Vacante');
-
+const Sequelize = require("sequelize");
 const passport = require('passport');
+const bcrypt = require('bcrypt');
+const Usuarios = require("../models/Usuarios");
 const enviarEmail = require("../handlers/email");
 const crypto = require('crypto');
-const { body, sanitizeBody, validationResult } = require('express-validator');
-*/
-/*
+const Op = Sequelize.Op;
+
+
 //loguear usuario
 exports.autenticarUsuario = passport.authenticate('local', { successRedirect: '/administracion',
                                     failureRedirect: '/iniciar-sesion',
@@ -24,16 +21,15 @@ exports.cerrarSesion = (req,res) =>{
     return res.redirect("/iniciar-sesion");
 }
 
+
 //verifica que estes logueado
 exports.usuarioAutenticado = (req,res,next) =>{
-    if(req.isAuthenticated()){
-        //req.isAuthenticated() will return true if user is logged in
-        return next();
-    } else{
-        return res.redirect("/iniciar-sesion");
-    }
+    return (req.isAuthenticated()) ?  next() :   res.redirect("/iniciar-sesion");
+    
 }
 
+
+/*
 //Enviar Token usuario
 exports.enviarToken = async (req,res) =>{
     const {email} = req.body;
@@ -124,17 +120,5 @@ exports.actualizarPassword = async (req,res) =>{
 
 
 
-exports.mostrarPanel = async (req,res) =>{
-    const vacantes = await Vacante.find( {autor: req.user._id} );
-    
-    res.render("administracion", {
-        nombrePagina: 'Panel de administracion',
-        tagline: 'Crea y administra tus vacantes',
-        vacantes,
-        nombre: req.user.nombre,
-        imagen: req.user.imagen,
-        cerrarSesion: true,
-    });
 
-};
 */
