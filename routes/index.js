@@ -9,6 +9,7 @@ const usuariosController = require("../controllers/usuariosController");
 const authController = require("../controllers/authController");
 const homeController = require("../controllers/homeController");
 const adminController = require("../controllers/adminController");
+const gruposController = require("../controllers/gruposController");
 
 
 
@@ -50,6 +51,8 @@ module.exports = () => {
 
     //sitio de administracion
     route.get('/administracion',authController.usuarioAutenticado,adminController.mostrarPanel);
+    //Nuevos Grupos
+    route.get('/nuevo-grupo',authController.usuarioAutenticado,gruposController.formNuevoGrupo);
 /*
     //editar Perfil
     route.get('/editar-perfil',authController.usuarioAutenticado,usuariosController.formEditarPerfil);

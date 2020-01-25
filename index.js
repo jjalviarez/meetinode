@@ -20,6 +20,7 @@ const SessionStore = require('express-session-sequelize')(session.Store);
 const db = require("./config/db");
 //Modelos
 require("./models/Usuarios");
+require("./models/Categorias");
 
 db.sync()
     //.then(()=> console.log('DB conectada'))
