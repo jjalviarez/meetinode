@@ -12,7 +12,7 @@ const createError = require('http-errors');
 const passport = require('./config/passport');
 var expressLayouts = require('express-ejs-layouts');
 const SessionStore = require('express-session-sequelize')(session.Store);
- 
+
 
 
 
@@ -21,6 +21,7 @@ const db = require("./config/db");
 //Modelos
 require("./models/Usuarios");
 require("./models/Categorias");
+require("./models/Grupos");
 
 db.sync()
     //.then(()=> console.log('DB conectada'))
@@ -40,7 +41,7 @@ app.use(bodyParser.json());
 // static files
 //app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static('public'));
-//agregra la caprteta de las vistas 
+//agregra la caprteta de las vistas
 app.set('views',path.join(__dirname, './views'));
 
 
@@ -50,7 +51,7 @@ app.set('view engine', 'ejs');
 
 
 //habilitar cookieParser
-app.use(cookieParser());
+app.use(cookieParser(process.env.SECRETO));
 
 //habilitar flash Menssages
 app.use(flash());
@@ -72,13 +73,13 @@ app.use(passport.session());
 //declaraciones de los middleware
 app.use((req, res, next) => {
     //console.log(req.headers.host);
-    res.locals.mensajes = req.flash();
     const fecha = new Date();
     res.locals.year  = fecha.getFullYear();
     //res.locals.usuario = {...req.user} || null;
-    next(); 
+    res.locals.mensajes = req.flash();
+    next();
 });
- 
+
 
 app.use('/',route());
 
@@ -102,11 +103,5 @@ app.use( (error,req, res, next) => {
 const host = process.env.HOST || '0.0.0.0';
 const port = process.env.PORT || '8080';
 app.listen(port, host, function () {
-  console.log('Server running at http://' + host + ':' + port + '/'); 
+  console.log('Server running at http://' + host + ':' + port + '/');
 });
-
-
-
-
-
-

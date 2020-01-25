@@ -9,9 +9,3 @@ exports.home = async (req,res,next) => {
         nombrePagina: 'Inicio',
     });
 };
-
-
-
-
-
-

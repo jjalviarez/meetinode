@@ -19,32 +19,32 @@ const gruposController = require("../controllers/gruposController");
 
 
 module.exports = () => {
-    
+
 
      //Ruta de home
     route.get('/', homeController.home );
 
-    
+
 
     //Crear Nueva Cuenta
     route.get('/crear-cuenta',usuariosController.formCrearCuenta);
     route.post('/crear-cuenta',usuariosController.validarregistro,usuariosController.crearCuenta);
-    
-    
+
+
     //Iniciar Sesion
     route.get('/iniciar-sesion',usuariosController.forminiciarSesion);
     route.post('/iniciar-sesion',authController.autenticarUsuario);
     route.get('/iniciar-sesion/:token',usuariosController.activarCuenta);
-/*    
-    //Creat Token para cambio de  Contraseña 
+/*
+    //Creat Token para cambio de  Contraseña
     route.get('/restablecer', usuariosController.formRestablecerPassword);
-    route.post('/restablecer', authController.enviarToken); 
+    route.post('/restablecer', authController.enviarToken);
 
-    
-    //Realizar Cambio de   Contraseña  
+
+    //Realizar Cambio de   Contraseña
     route.get('/restablecer/:token', authController.validarToken);
     route.post('/restablecer/:token', authController.validarPassword,authController.actualizarPassword);
-    
+
      //Cerrar sesion
     route.get('/logout', authController.usuarioAutenticado, authController.cerrarSesion);
 */
@@ -53,6 +53,7 @@ module.exports = () => {
     route.get('/administracion',authController.usuarioAutenticado,adminController.mostrarPanel);
     //Nuevos Grupos
     route.get('/nuevo-grupo',authController.usuarioAutenticado,gruposController.formNuevoGrupo);
+    route.post('/nuevo-grupo',authController.usuarioAutenticado,gruposController.crearGrupo);
 /*
     //editar Perfil
     route.get('/editar-perfil',authController.usuarioAutenticado,usuariosController.formEditarPerfil);
@@ -61,13 +62,13 @@ module.exports = () => {
     usuariosController.subirImagen,
     usuariosController.validarPerfil,
     usuariosController.actualizarPerfil);
-    
-    //buscador de vacantes 
+
+    //buscador de vacantes
     route.post('/buscador',  vacantesController.buscarVacante );
-  */  
-    
-    
-    
+  */
+
+
+
     return route;
 
 };
