@@ -51,9 +51,20 @@ module.exports = () => {
 
     //sitio de administracion
     route.get('/administracion',authController.usuarioAutenticado,adminController.mostrarPanel);
+    
+    //Grupos
     //Nuevos Grupos
     route.get('/nuevo-grupo',authController.usuarioAutenticado,gruposController.formNuevoGrupo);
-    route.post('/nuevo-grupo',authController.usuarioAutenticado,gruposController.crearGrupo);
+    route.post('/nuevo-grupo',
+        authController.usuarioAutenticado,
+        gruposController.subirImagen,
+        gruposController.crearGrupo
+        );
+    //Editar Grupo
+    route.get('/editar-grupo/:id',authController.usuarioAutenticado,gruposController.formEditarGrupo);
+    route.post('/editar-grupo/:id', authController.usuarioAutenticado, gruposController.actualizarGrupo);
+    
+    
 /*
     //editar Perfil
     route.get('/editar-perfil',authController.usuarioAutenticado,usuariosController.formEditarPerfil);

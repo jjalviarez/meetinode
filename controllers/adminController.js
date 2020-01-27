@@ -1,14 +1,19 @@
 
+const Grupos = require("../models/Grupos");
 
 
 
 
 exports.mostrarPanel = async (req,res) =>{
-    //const vacantes = await Vacante.find( {autor: req.user._id} );
+    const grupos = await Grupos.findAll({
+                where: {
+                        usuarioId: req.user.id
+                }
+        });
     
     res.render("administracion", {
         nombrePagina: 'Panel de administracion',
-        //vacantes,
+        grupos,
         nombre: req.user.nombre,
         imagen: req.user.imagen,
         cerrarSesion: true,
