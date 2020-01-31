@@ -1,6 +1,6 @@
 <main class='contenedor contenedor-formularios no-padding'>
     <h1><%= nombrePagina %></h1>
-    <form class='default-form' method='POST' <%- locals.grupo ? "" : 'enctype="multipart/form-data"' %> >
+    <form class='default-form' method='POST' <%- locals.nuevo ? 'enctype="multipart/form-data"' : ""  %> >
         <div class='campo'>
             <label>Nombre</label>
             <input type='text' name='nombre' placeholder='Nombre Grupo' value = '<%- locals.grupo ? locals.grupo.nombre : "" %>'>
@@ -23,18 +23,18 @@
                 <% } %>
             </select>
         </div>
-        <% if (!locals.grupo) { %>
+        <div class='campo'>
+            <label>Pagina</label>
+            <input type='url' name='url' placeholder='Tu Pagina' value = '<%- locals.grupo ? locals.grupo.url : "" %>'>
+        </div>
+        <% if (locals.nuevo) { %>
             <div class='campo'>
                 <label>Imagen</label>
                 <input type='file' name='imagen'>
             </div>
         <% } %>
-        <div class='campo'>
-            <label>Pagina</label>
-            <input type='url' name='url' placeholder='Tu Pagina' value = '<%- locals.grupo ? locals.grupo.url : "" %>'>
-        </div>
         <div class='campo enviar'>
-               <input type= 'submit' value ='<%- locals.grupo ? "Actualizar Grupo" : "Crear Grupo" %>'  class= 'btn btn-rosa'> </input>
+               <input type= 'submit' value ='<%- locals.nuevo ? "Crear Grupo" : "Actualizar Grupo" %>'  class= 'btn btn-rosa'> </input>
         </div>
     </form>
 </main>
