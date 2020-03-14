@@ -1,0 +1,70 @@
+<div class="contenedor proximos-eventos">
+    <h1><%= nombrePagina %></h1>
+    <h2>Próximos Meeti's</h2>
+    <div class="grid columnas-md-3 ">
+        <% if (meetis.length) { %>
+            <% moment.locale('es-us') %>
+            <% meetis.forEach(meeti =>{ %>
+                <div class="card">
+                    <% if (meeti.grupo.imagen) { %>
+                        <img src="/uploads/grupos/<%= meeti.grupo.imagen %>">
+                    <% } else {  %>
+                        <img src="/ing/meeti.jpg">
+                    <% }  %>
+                    <div class="card-texto">
+                        <p class="fecha"><%- moment(meeti.fecha + ' ' + meeti.hora).format('LLLL') %></p>
+                        <a href="/meeti/<%- meeti.slug %>">
+                            <h3><%- meeti.titulo %></h3>
+                        </a>
+                        <div class="info-autor">
+                            <div class="imagen">
+                                <% if (meeti.usuario.imagen) { %>
+                                        <img src='/uploads/perfil/<%= meeti.usuario.imagen %>'>
+                                 <% }  %>
+                            </div>
+                            <div class="informacion">
+                                <p>Organizado por:</p>
+                                <p class="autor"><%- meeti.usuario.nombre %></p>
+                            </div>
+                        </div>     
+                    </div>
+                </div>
+            <% }) %> 
+        <% } else { %>
+            <p>No tienes ningun Meeti</p>
+        <% }  %>
+    </div>
+    
+    <% if (meetisPasados.length) { %>
+        <h2>Meeti's Pasados </h2>
+        <div class="grid columnas-md-3 ">
+            <% moment.locale('es-us') %>
+            <% meetisPasados.forEach(meeti =>{ %>
+                <div class="card">
+                    <% if (meeti.grupo.imagen) { %>
+                        <img src="/uploads/grupos/<%= meeti.grupo.imagen %>">
+                    <% } else {  %>
+                        <img src="/ing/meeti.jpg">
+                    <% }  %>
+                    <div class="card-texto">
+                        <p class="fecha"><%- moment(meeti.fecha + ' ' + meeti.hora).format('LLLL') %></p>
+                        <a href="/meeti/<%- meeti.slug %>">
+                            <h3><%- meeti.titulo %></h3>
+                        </a>
+                        <div class="info-autor">
+                            <div class="imagen">
+                                <% if (meeti.usuario.imagen) { %>
+                                        <img src='/uploads/perfil/<%= meeti.usuario.imagen %>'>
+                                 <% }  %>
+                            </div>
+                            <div class="informacion">
+                                <p>Organizado por:</p>
+                                <p class="autor"><%- meeti.usuario.nombre %></p>
+                            </div>
+                        </div>     
+                    </div>
+                </div>
+            <% }) %> 
+        </div>
+    <% }  %>
+</div>

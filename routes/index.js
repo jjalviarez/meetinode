@@ -57,6 +57,9 @@ module.exports = () => {
     route.get('/meeti/:url',meetiControllerFE.meetiPorURL);
     //Asistencia meeti
     route.post('/confirmar-asistencia/:slug',authController.usuarioAutenticado,meetiControllerFE.asistenciaMeeti);
+    //mostrar meeti por categoria
+    route.get('/categoria/:id',meetiControllerFE.meetiPorCategoria);
+    
     //mostrar asistentes
     route.get('/asistentes/:slug',meetiControllerFE.meetiAsistentes);
     //mostrar Usuario

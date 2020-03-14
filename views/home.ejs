@@ -1,6 +1,10 @@
 <div class="hero">
     <h1>Encuentra o crea un grupo para compartir lo que más te gusta</h1>
-    <a href="/crear-cuenta" class="btn btn-amarillo">Obtener Cuenta</a>
+    <% if (locals.user.id) { %>
+        <a href="/administracion" class="btn btn-amarillo">Administra tu Cuenta</a>
+    <% } else { %>
+        <a href="/crear-cuenta" class="btn btn-amarillo">Obtener Cuenta</a>
+    <% }  %>
 </div>
 
 <div class="buscador-inicio">
@@ -57,16 +61,6 @@
         <% } else { %>
             <p>No tienes ningun Meeti</p>
         <% }  %>
-        
-        
-        
-
-
-
-
-        
-        
-        
     </div>
 </div>
 

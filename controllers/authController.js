@@ -18,7 +18,7 @@ exports.autenticarUsuario = passport.authenticate('local', { successRedirect: '/
 //Desloguear usuario
 exports.cerrarSesion = (req,res) =>{
     req.logout();
-    return res.redirect("/iniciar-sesion");
+    return res.redirect("/");
 }
 
 
