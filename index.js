@@ -22,6 +22,7 @@ const db = require("./config/db");
 require("./models/Usuarios");
 require("./models/Categorias");
 require("./models/Grupos");
+require("./models/Meetis");
 
 db.sync()
     //.then(()=> console.log('DB conectada'))
@@ -75,7 +76,7 @@ app.use((req, res, next) => {
     //console.log(req.headers.host);
     const fecha = new Date();
     res.locals.year  = fecha.getFullYear();
-    //res.locals.usuario = {...req.user} || null;
+    res.locals.user = {...req.user} || null;
     res.locals.mensajes = req.flash();
     next();
 });

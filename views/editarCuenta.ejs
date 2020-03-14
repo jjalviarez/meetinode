@@ -9,12 +9,23 @@
             <label>Email</label>
             <input type='email' name='email' placeholder='Ej: correo@correo.com' value = '<%- locals.usuario ? locals.usuario.email : "" %>'>
         </div>
+        <div class="campo descripcion">
+                <label>Quien soy</label>
+                <div class="contenedor-editor">
+                    <input type="hidden" id="x" name="descripcion"   value = '<%- locals.usuario ? locals.usuario.descripcion : "" %>' >
+                    <trix-editor input="x"></trix-editor>
+                </div>
+        </div>
         <div class="campo">
-            <label>Password</label>
+            <label>Password anterior</label>
+            <input type='password' name='passwordOld' placeholder='Contraseña' >
+        </div>
+        <div class="campo">
+            <label>Nuevo Password</label>
             <input type='password' name='password' placeholder='Contraseña' >
         </div>
         <div class="campo">
-            <label>Confirmar Password</label>
+            <label>Confirmar Nuevo Password</label>
             <input type='password' name='confirmar' placeholder='Confirma Contraseña' >
         </div>
         <div class="campo enviar">

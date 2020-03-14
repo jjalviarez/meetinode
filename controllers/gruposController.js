@@ -35,6 +35,7 @@ exports.crearGrupo =  async (req,res,next) => {
     if(req.file) {
         nuevoGrupo.imagen= req.file.filename;
     }
+    nuevoGrupo.id =  uuidv4();
     //console.log(nuevoGrupo);
     try {
         const grupo = await Grupos.create(nuevoGrupo);
@@ -262,8 +263,8 @@ exports.formEliminarGrupo =  async (req,res,next) => {
             }
     });
     if(!grupo) return next();
-    res.render('eliminarGrupo', {
-            nombrePagina : 'Eliminar Gripo: ' + grupo.nombre
+        res.render('form-eliminar', {
+        nombrePagina : 'Eliminar Grupo: ' + grupo.nombre
     });
 };
 
@@ -296,7 +297,7 @@ exports.eliminarGrupo =  async (req,res,next) => {
     } catch (error) {
         const err= error.errors.map(error => error.message);
         req.flash('error',err );
-        return res.redirect('/editar-imagen-grupo/' + req.params.id);
+        return res.redirect('/editar-grupo/' + req.params.id);
     }
 };
 

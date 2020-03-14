@@ -9,8 +9,7 @@ const Grupos = db.define('grupos', {
     id : {
         type : Sequelize.UUID,
         primaryKey: true,
-        allowNull: false,
-        defaultValue: uuidv4()
+        allowNull: false
     },
     nombre : {
         type: Sequelize.TEXT,

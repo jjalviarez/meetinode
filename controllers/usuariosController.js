@@ -3,10 +3,10 @@ const multer  = require('multer');
 const shortid = require('shortid');
 const uuidv1 = require('uuid/v1');
 const { body, validationResult, sanitizeBody } = require('express-validator');
-
 const Usuarios = require("../models/Usuarios");
 const crypto = require('crypto');
 const enviarEmail = require("../handlers/email");
+const fs  = require('fs');
 
 
 
@@ -14,6 +14,7 @@ const enviarEmail = require("../handlers/email");
 exports.formCrearCuenta = (req,res) => {
     res.render('crearCuenta', {
         nombrePagina: 'Crear Cuenta',
+        nuevo : true
     });
 };
 
@@ -51,9 +52,7 @@ exports.crearCuenta = async (req,res,next) => {
         res.render('crearCuenta', {
             mensajes: req.flash(),
             nombrePagina: 'Crear Cuenta',
-            nombre,
-            email, 
-            password
+            nuevo : true
         });
         
         
@@ -62,7 +61,6 @@ exports.crearCuenta = async (req,res,next) => {
 
 
 exports.validarregistro = async  (req,res,next) => {
-    const {email, password, nombre, confirmar} = req.body;
     const rules = [
         sanitizeBody('nombre').escape().run(req),
         sanitizeBody('email').escape().run(req),
@@ -81,10 +79,7 @@ exports.validarregistro = async  (req,res,next) => {
     res.render('crearCuenta', {
             mensajes: req.flash(),
             nombrePagina: 'Crear Cuenta',
-            email, 
-            password,
-            nombre,
-            confirmar
+            nuevo : true
     });
     return ;
 };
@@ -140,42 +135,32 @@ exports.activarCuenta = async (req,res) =>{
 
 
 
-/*
+
 exports.formEditarPerfil = async (req,res,next) => {
-    res.render("editar-perfil", {
-        nombrePagina: req.user.nombre,
-        tagline: 'Ecitar Usuario',
-        usuario :req.user,
-        nombre: req.user.nombre,
-        imagen: req.user.imagen,
-        cerrarSesion: true,
+    const usuario = await Usuarios.findByPk(req.user.id);
+    res.render("editarCuenta", {
+        nombrePagina: 'Editar Usuario: ' + usuario.nombre,
+        usuario
     });
 };
 
+
+
 exports.actualizarPerfil = async (req,res,next) => {
-    const {email, password, nombre, passwordOld} = req.body;
-    const usuario = await Usuario.findById(req.user._id);
+    const {email, password, nombre, passwordOld, descripcion} = req.body;
+    const usuario = await Usuarios.findByPk(req.user.id);
     if (password) {
         if(usuario.verificarPassword(passwordOld)){
-            usuario.password = password;
+            usuario.password = usuario.hashPassword(password);
         }
         else {
             req.flash('error', 'Password invalido');
-            return res.render('editar-perfil', {
-                    mensajes: req.flash(),
-                    nombrePagina: 'Editar Usuario',
-                    usuario: req.user,
-                    nombre: req.user.nombre,
-                    imagen: req.user.imagen,
-                    cerrarSesion: true,
-            });
+            return res.redirect("/editar-perfil");
         }
-    }
-    if(req.file) {
-        usuario.imagen= req.file.filename;
     }
     usuario.nombre = nombre;
     usuario.email = email;
+    usuario.descripcion = descripcion;
     await usuario.save();
     req.flash('correcto', 'Cambios Guardados Correctamente');
     res.redirect("/administracion");
@@ -188,6 +173,7 @@ exports.validarPerfil = async  (req,res,next) => {
         sanitizeBody('nombre').escape().run(req),
         sanitizeBody('email').escape().run(req),
         sanitizeBody('password').escape().run(req),
+        sanitizeBody('descripcion').escape().run(req),
         sanitizeBody('confirmar').escape().run(req),
         sanitizeBody('passwordOld').escape().run(req),
         body('nombre','El nombre es Obligatorio').notEmpty().run(req),
@@ -202,16 +188,63 @@ exports.validarPerfil = async  (req,res,next) => {
         return next();
     }
     req.flash('error', errores.array().map(error => error.msg));
-    res.render('editar-perfil', {
-        mensajes: req.flash(),
-        nombrePagina: 'Editar Usuario',
-        usuario: req.user,
-        nombre: req.user.nombre,
-        imagen: req.user.imagen,
-        cerrarSesion: true,
-    });
+    res.redirect("/editar-perfil");
     return;
 };
+
+
+//Edidar la imagen de un grupo
+exports.formEditarImagenPerfil =  async (req,res,next) => {
+    const usuario = await Usuarios.findByPk(req.user.id);
+    if(!usuario) return next();
+    res.render('imagenPerfil', {
+            nombrePagina : 'Editar Imagen - ' + usuario.nombre,
+            imagen : usuario.imagen
+    });
+};
+
+
+
+
+
+
+//Guarda Imagen de grupo
+exports.imagenPerfil =  async (req,res,next) => {
+    const usuario = await Usuarios.findByPk(req.user.id);
+    if(!usuario) {
+        req.flash('error','Operacion no  Valida')
+        return res.redirect("/iniciar-sesion");
+    }
+    
+    if(req.file) {
+        var imagenAnterior = usuario.imagen;
+        usuario.imagen= req.file.filename;
+    }
+    else {
+        return res.redirect('/administracion');
+    }
+    
+    
+    try {
+        await usuario.save();
+        //De existir un archivo anterior lo elimina
+        if(imagenAnterior) {
+            imagenAnterior= __dirname + '/../public/uploads/perfil/' + imagenAnterior;
+            fs.unlink(imagenAnterior, (err) => {
+                if (err) console.log(err);
+            });
+        }
+        
+        req.flash('correcto', 'Se actualizo el Imagen Correctamente');
+        return res.redirect('/administracion');
+
+    } catch (error) {
+        const err= error.errors.map(error => error.message);
+        req.flash('error',err );
+        return res.redirect("/imagen-perfil");
+    }
+};
+
 
 
 //Carga de Archivo----------------------------------
@@ -230,14 +263,7 @@ exports.subirImagen = (req,res,next) => {
             else {
                 req.flash('error', error.message);
             }
-            res.render('editar-perfil', {
-                mensajes: req.flash(),
-                nombrePagina: 'Editar Usuario',
-                usuario: req.user,
-                nombre: req.user.nombre,
-                imagen: req.user.imagen,
-                cerrarSesion: true,
-            });
+            res.redirect("/imagen-perfil");
             return ;
         } 
         else {
@@ -248,7 +274,7 @@ exports.subirImagen = (req,res,next) => {
 //Configuracion del archivo
 const configuracionMulter = {
     limits: {
-        fileSize : 10000
+        fileSize : 100000
     },
     fileFilter (req, file, cb) {
         if (file.mimetype.split('/')[0]==='image') {
@@ -260,7 +286,7 @@ const configuracionMulter = {
     },
     storage :  multer.diskStorage({
               destination : (req, file, cb) => {
-                cb(null, __dirname + '../../public/uploads/perfiles');
+                cb(null, __dirname + '../../public/uploads/perfil');
               },
               filename : (req, file, cb) => {
                 const extnsion = file.mimetype.split('/')[1];
@@ -272,4 +298,3 @@ const configuracionMulter = {
 //inicializar multer
 const upload = multer(configuracionMulter).single('imagen');
 
-*/

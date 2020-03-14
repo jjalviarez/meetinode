@@ -1,19 +1,24 @@
 import {OpenStreetMapProvider} from 'leaflet-geosearch';
-//Se inicializa el mapa y los marcadores
-var  map = L.map('mapa');
-var markets = new L.featureGroup().addTo(map);
+import asistencia from './asistencia';
+//Se inicializa variables globales
+var  map;
+var markets;
 var market;
 var geocodeService;
 var provider;
-document.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', () => {
     const mapa = document.querySelector('.mapa');
     if (mapa) {
+        //Se inicializa el mapa y los marcadores
+        map = L.map('mapa');
+        markets = new L.featureGroup().addTo(map);
+        
         //Se inicializa provider y geocodeService
         geocodeService = L.esri.Geocoding.geocodeService();
         provider = new OpenStreetMapProvider();
         //Cargar el mapa
         //datos de la vista y markador automatico automarica
-        const ll = [mapa.dataset.la,mapa.dataset.lo];
+        const ll = [document.querySelector('#lat').value,document.querySelector('#lng').value];
         map.setView(ll, 13);
         market = new L.marker(ll, {
                 draggable : true,
@@ -37,6 +42,25 @@ document.addEventListener('DOMContentLoaded', () => {
     
     var input = document.querySelector('FORM');
     if (input) input.addEventListener("keydown", enter );
+    
+    const mapamitti = document.querySelector('#mapamitti');
+    if (mapamitti) {
+        
+        const ll = [document.querySelector('#lat').value,document.querySelector('#lng').value];
+        const direccion = document.querySelector('#direccion').value
+        //Se inicializa el mapa y los marcadores
+        
+        map = L.map('mapamitti').setView(ll, 16);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        
+        L.marker(ll).addTo(map)
+            .bindPopup(direccion)
+            .openPopup();
+        
+    }
 
     
 });
@@ -69,13 +93,16 @@ const actualizarMarket = (ev) => {
         }
         else  {
             market.bindPopup(result.address.Match_addr).openPopup();
-            console.log(result);
-            document.querySelector('#direccion').value= result.address.Address || '';
-            document.querySelector('#ciudad').value= result.address.City || '';
-            document.querySelector('#estado').value= result.address.Region || '';
-            document.querySelector('#pais').value= result.address.CountryCode || '';
-            document.querySelector('#lat').value= result.latlng.lat || '';
-            document.querySelector('#lng').value= result.latlng.lng || '';
+            //console.log(result);
+            //console.log(document.querySelector('#lat').value +'='+ result.latlng.lat +'\n'+ document.querySelector('#lng').value +'='+ result.latlng.lng);
+            if (document.querySelector('#lat').value != result.latlng.lat || document.querySelector('#lng').value != result.latlng.lng) {
+                document.querySelector('#direccion').value= result.address.Address || '';
+                document.querySelector('#ciudad').value= result.address.City || '';
+                document.querySelector('#estado').value= result.address.Region || '';
+                document.querySelector('#pais').value= result.address.CountryCode || '';
+                document.querySelector('#lat').value= result.latlng.lat || '';
+                document.querySelector('#lng').value= result.latlng.lng || '';
+            }
         }
     });
     
@@ -94,4 +121,4 @@ const enter = (event) => {
         input.focus();
         input.select();
     }
-}
+};

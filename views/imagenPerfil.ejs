@@ -1,0 +1,18 @@
+<main class='contenedor contenedor-formularios no-padding'>
+    <h1><%= nombrePagina %></h1>
+    <form class='default-form' method='POST' enctype="multipart/form-data" >
+        <% if (imagen) { %>
+        <div class='campo'>
+            <label>Imagen Actual</label>
+            <img src='/uploads/perfil/<%= imagen %>' class="imagen">
+        </div>
+        <% } %>
+        <div class='campo'>
+            <label>Imagen</label>
+            <input type='file' name='imagen'>
+        </div>
+        <div class='campo enviar'>
+               <input type= 'submit' value = "Actualizar Imagen"  class= 'btn btn-rosa'> </input>
+        </div>
+    </form>
+</main>

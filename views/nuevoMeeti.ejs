@@ -33,7 +33,7 @@
         </div>
         <div class="campo">
             <label>Cupo</label>
-            <input type="number" min="1" name="cupo" placeholder="Cupo Meeti (si aplica)" value = '<%- locals.meeti ? locals.meeti.cupo : "" %>' >
+            <input type="number" min="1" name="cupo" placeholder="Cupo Meeti (si aplica)" value = '<%- (locals.meeti && locals.meeti.cupo!=0) ? locals.meeti.cupo : "" %>' >
         </div>
         <div class="campo descripcion">
             <label>Descripción</label>
@@ -52,7 +52,7 @@
             </div>
         </div>
         
-        <div class="campo mapa" data-la='<%-  ubicacion.ll[0] %>' data-lo='<%-  ubicacion.ll[1] %>' >
+        <div class="campo mapa">
             <div id="mapa"></div>
         </div>
             
@@ -76,11 +76,11 @@
         </div>
         <div class="campo">
             <label>Latitud</label>
-            <input type="text" id="lat" name="lat" value = '<%- locals.meeti ? locals.meeti.lat : "" %>' readonly >
+            <input type="text" id="lat" name="lat" value = '<%- locals.meeti ? meeti.ubicacion.coordinates[0] : ubicacion.ll[0] %>' readonly >
         </div>
         <div class="campo">
             <label>Longtitud</label>
-            <input type="text" id="lng" name="lng" value = '<%- locals.meeti ? locals.meeti.lng : "" %>' readonly >
+            <input type="text" id="lng" name="lng" value = '<%- locals.meeti ? meeti.ubicacion.coordinates[1] : ubicacion.ll[1] %>' readonly >
         </div>
         <div class="campo enviar">
             <input type="submit" class="btn btn-rosa" value= '<%- locals.nuevo ? "Crear Meeti" : "Actualizar Meeti" %>' >

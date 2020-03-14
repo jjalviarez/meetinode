@@ -11,6 +11,8 @@ const homeController = require("../controllers/homeController");
 const adminController = require("../controllers/adminController");
 const gruposController = require("../controllers/gruposController");
 const meetiController = require("../controllers/meetiController");
+const meetiControllerFE = require("../controllers/frontend/meetiControllerFE");
+const usuarioControllerFE = require("../controllers/frontend/usuarioControllerFE");
 
 
 
@@ -22,6 +24,7 @@ const meetiController = require("../controllers/meetiController");
 module.exports = () => {
 
 
+//--------------- Area Publica ----------------------------
      //Ruta de home
     route.get('/', homeController.home );
 
@@ -45,10 +48,38 @@ module.exports = () => {
     //Realizar Cambio de   Contraseña
     route.get('/restablecer/:token', authController.validarToken);
     route.post('/restablecer/:token', authController.validarPassword,authController.actualizarPassword);
-
+*/
      //Cerrar sesion
     route.get('/logout', authController.usuarioAutenticado, authController.cerrarSesion);
-*/
+
+    //Meeti por utl
+    route.get('/meeti/:url',meetiControllerFE.meetiPorURL);
+    //Asistencia meeti
+    route.post('/confirmar-asistencia/:slug',authController.usuarioAutenticado,meetiControllerFE.asistenciaMeeti);
+    //mostrar asistentes
+    route.get('/asistentes/:slug',meetiControllerFE.meetiAsistentes);
+    //mostrar Usuario
+    route.get('/usuario/:id',usuarioControllerFE.usuario);
+
+
+//--------------- Area privada----------------------------
+
+    //editar Perfil
+    route.get('/editar-perfil',authController.usuarioAutenticado,usuariosController.formEditarPerfil);
+    route.post('/editar-perfil',
+    authController.usuarioAutenticado,
+    //usuariosController.subirImagen,
+    usuariosController.validarPerfil,
+    usuariosController.actualizarPerfil);
+    //Edita imagen perfil
+    route.get('/imagen-perfil',authController.usuarioAutenticado,usuariosController.formEditarImagenPerfil);
+    route.post('/imagen-perfil',
+        authController.usuarioAutenticado,
+        usuariosController.subirImagen,
+        usuariosController.imagenPerfil
+        );
+
+
 
     //sitio de administracion
     route.get('/administracion',authController.usuarioAutenticado,adminController.mostrarPanel);
@@ -84,25 +115,28 @@ module.exports = () => {
     route.get('/aqui',meetiController.ipMeeti);
     route.post('/nuevo-meeti',
         authController.usuarioAutenticado,
-        //gruposController.subirImagen,
+        meetiController.sanitizarMeeti,
         meetiController.crearMeeti
         );
-   
-   
-   
-   
-   
     
-    
-/*
-    //editar Perfil
-    route.get('/editar-perfil',authController.usuarioAutenticado,usuariosController.formEditarPerfil);
-    route.post('/editar-perfil',
-    authController.usuarioAutenticado,
-    usuariosController.subirImagen,
-    usuariosController.validarPerfil,
-    usuariosController.actualizarPerfil);
+    //Editar Meeti
+    route.get('/editar-meeti/:id',authController.usuarioAutenticado,meetiController.formEditarMeeti);
+    route.post('/editar-meeti/:id',
+        authController.usuarioAutenticado,
+        meetiController.sanitizarMeeti,
+        meetiController.actualizarMeeti);
+    //Eiminar Meeti
+    route.get('/eliminar-meeti/:id',authController.usuarioAutenticado,meetiController.formEliminarMeeti);
+    route.post('/eliminar-meeti/:id', authController.usuarioAutenticado, meetiController.eliminarMeeti);
+   
+   
+   
+   
+   
 
+
+
+/*
     //buscador de vacantes
     route.post('/buscador',  vacantesController.buscarVacante );
   */
