@@ -30,7 +30,11 @@
         <% moment.locale('es-us') %>
             <% meetis.forEach(meeti =>{ %>
                 <div class="card">
-                    <img src="/uploads/grupos/<%= meeti.grupo.imagen %>">
+                    <% if (meeti.grupo.imagen) { %>
+                        <img src="/uploads/grupos/<%= meeti.grupo.imagen %>">
+                    <% } else {  %>
+                        <img src="/ing/meeti.jpg">
+                    <% }  %>
                     <div class="card-texto">
                         <p class="fecha"><%- moment(meeti.fecha + ' ' + meeti.hora).format('LLLL') %></p>
                         <a href="/meeti/<%- meeti.slug %>">

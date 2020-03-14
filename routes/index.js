@@ -13,6 +13,7 @@ const gruposController = require("../controllers/gruposController");
 const meetiController = require("../controllers/meetiController");
 const meetiControllerFE = require("../controllers/frontend/meetiControllerFE");
 const usuarioControllerFE = require("../controllers/frontend/usuarioControllerFE");
+const grupoControllerFE = require("../controllers/frontend/grupoControllerFE");
 
 
 
@@ -60,6 +61,8 @@ module.exports = () => {
     route.get('/asistentes/:slug',meetiControllerFE.meetiAsistentes);
     //mostrar Usuario
     route.get('/usuario/:id',usuarioControllerFE.usuario);
+    //mostrar Grupo
+    route.get('/grupo/:id',grupoControllerFE.grupo);
 
 
 //--------------- Area privada----------------------------
