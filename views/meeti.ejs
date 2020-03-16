@@ -61,46 +61,52 @@
             
             <div class="comentarios">
                 <h2>Comentarios</h2>
-                <div class="comentario">
-                    <div class="imagen">
-                        
-                    </div>
-                    <div class="texto">
-                        <p>
-                            Hola
-                        </p>
-                        <p>
-                            Escrito por:
-                            <span>Jorge</span>
-                        </p>
-                        <input type="button" value="Eliminar" class="btn btn-azul"/>
-                    </div>
-                </div>
-                <div class="comentario">
-                    <div class="imagen">
-                        
-                    </div>
-                    <div class="texto">
-                        <p>
-                            Hola
-                        </p>
-                        <p>
-                            Escrito por:
-                            <span>Jorge</span>
-                        </p>
-                    </div>
-                </div>
                 
-                <form action="#" class="default-form comentarios">
-                    <legend>Agrega un comentario</legend>
-                    <div class="campo">
-                        <label>Comentario</label>
-                        <textarea  name="comentario"></textarea>
-                    </div>
-                    <div class="campo enviar">
-                        <input type="submit" class="btn btn-rosa" value= 'Enviar' >
-                    </div>
-                </form>
+                <% if (comentarios.length) { %>
+                <% moment.locale('es-us') %>
+                    <% comentarios.forEach(comentario =>{ %>
+                        <div class="comentario">
+                            <div class="imagen">
+                                <% if (comentario.usuario.imagen) { %>
+                                        <img src='/uploads/perfil/<%= meeti.usuario.imagen %>'>
+                                <% }  %>    
+                            </div>
+                            <div class="texto">
+                                <p>
+                                    <%- comentario.mensaje %>
+                                </p>
+                                <p>
+                                    Escrito por:
+                                    <span><%- comentario.usuario.nombre %></span>
+                                </p>
+                                <% if ((locals.user.id == comentario.usuario.id) || (locals.user.id == meeti.usuario.id)) { %>
+                                <input type="button" value="Eliminar" class="btn btn-azul"/>
+                                <% }  %>
+                                <p><%- moment(comentario.fecha).fromNow(); %></p>
+                            </div>
+                        </div>
+                    <% }) %> 
+                <% } else { %>
+                    <p>Se el Primero en Comentar</p>
+                <% }  %>
+                
+                
+                <% if (locals.user.id) { %>
+                    <form action="/meeti/<%- meeti.id %>"  class="default-form comentarios" method='POST'>
+                        <legend>Agrega un comentario</legend>
+                        <div class="campo">
+                            <label>Comentario</label>
+                            <textarea  name="mensaje"></textarea>
+                        </div>
+                        <div class="campo enviar">
+                            <input type="submit" class="btn btn-rosa" value= 'Enviar' >
+                        </div>
+                    </form>
+                <% } else { %>
+                    <p>Para agregagr un comentario</p>
+                    <a href="/iniciar-sesion" class="btn btn-azul">Inicia sesion</a>
+                <% }  %>                
+
                 
             </div>
             

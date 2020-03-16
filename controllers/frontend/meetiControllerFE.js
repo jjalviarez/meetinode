@@ -1,5 +1,6 @@
 
 
+const Comentarios = require("../../models/Comentarios");
 const Grupos = require("../../models/Grupos");
 const Meetis = require("../../models/Meetis");
 const Usuarios = require("../../models/Usuarios");
@@ -15,7 +16,10 @@ const {Op} = require("sequelize");
 
 exports.meetiPorURL =  async (req,res,next) => {
     const meeti = await Meetis.findOne({
-        where: { slug: req.params.url },
+        where: { 
+            slug: req.params.url 
+            
+        },
         include: [
             {
                 model: Grupos
@@ -26,12 +30,27 @@ exports.meetiPorURL =  async (req,res,next) => {
             }
         ]
     });
+    const comentarios = await Comentarios.findAll({ 
+        where: { 
+            meetiId: meeti.id 
+        },
+        include: [
+            {
+                model: Usuarios,
+                attributes: ['id','nombre','imagen'],
+            }
+        ],
+        order: [
+                ['fecha', 'DESC']
+        ]
+    });
     if(!meeti) {
         return next();
     }
     res.render("meeti", {
         nombrePagina: 'Meeti',
         meeti,
+        comentarios,
         moment
     });
 };

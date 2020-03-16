@@ -14,6 +14,7 @@ const meetiController = require("../controllers/meetiController");
 const meetiControllerFE = require("../controllers/frontend/meetiControllerFE");
 const usuarioControllerFE = require("../controllers/frontend/usuarioControllerFE");
 const grupoControllerFE = require("../controllers/frontend/grupoControllerFE");
+const comentariosControllerFE = require("../controllers/frontend/comentariosControllerFE");
 
 
 
@@ -59,11 +60,16 @@ module.exports = () => {
     route.post('/confirmar-asistencia/:slug',authController.usuarioAutenticado,meetiControllerFE.asistenciaMeeti);
     //mostrar meeti por categoria
     route.get('/categoria/:id',meetiControllerFE.meetiPorCategoria);
-    
     //mostrar asistentes
     route.get('/asistentes/:slug',meetiControllerFE.meetiAsistentes);
+    //Agregar Comentarios
+    route.post('/meeti/:id',  comentariosControllerFE.sanitizarComentario,comentariosControllerFE.agregarComentario);
+    
+    
     //mostrar Usuario
     route.get('/usuario/:id',usuarioControllerFE.usuario);
+    
+    
     //mostrar Grupo
     route.get('/grupo/:id',grupoControllerFE.grupo);
 

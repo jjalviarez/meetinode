@@ -3,9 +3,8 @@ var geoip = require('geoip-lite');
 //const Categorias = require("../models/Meeti");
 const Grupos = require("../models/Grupos");
 const Meetis = require("../models/Meetis");
-const { body, validationResult, sanitizeBody } = require('express-validator');
-const multer  = require('multer');
-const fs  = require('fs');
+const { sanitizeBody } = require('express-validator');
+
 const uuidv4 = require('uuid/v4');
 
 

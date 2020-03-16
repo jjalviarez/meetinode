@@ -23,6 +23,7 @@ require("./models/Usuarios");
 require("./models/Categorias");
 require("./models/Grupos");
 require("./models/Meetis");
+require("./models/Comentarios");
 
 db.sync()
     //.then(()=> console.log('DB conectada'))
