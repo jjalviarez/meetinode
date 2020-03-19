@@ -42,3 +42,34 @@ exports.sanitizarComentario = async  (req,res,next) => {
     
     
 };
+
+
+exports.eliminarComentario =  async (req,res,next) => {
+    const comentario = await Comentarios.findOne({ 
+        where: { 
+            id: req.params.id 
+        },
+        include: [
+            {
+                model: Meetis,
+                attributes: ['usuarioId'],
+            }
+        ]
+    });
+    if(comentario && (comentario.usuarioId == req.user.id || comentario.meeti.usuarioId == req.user.id )) {
+         
+        try {
+            await comentario.destroy();
+            res.status(200);
+            res.json({ mensaje: 'Eliminado' });
+        } catch (error) {
+            const err= error.errors.map(error => error.message);
+            res.status(409);
+            res.json({mensaje:"Accion no Completada"});
+        }
+    }
+    else {
+            res.status(403);
+            res.json({mensaje: "Accion no valida"});
+    }
+};

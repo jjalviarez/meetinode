@@ -77,10 +77,11 @@
                                 </p>
                                 <p>
                                     Escrito por:
-                                    <span><%- comentario.usuario.nombre %></span>
+                                    <a href="/usuario/<%- comentario.usuario.id %>"><%- comentario.usuario.nombre %></a> 
                                 </p>
                                 <% if ((locals.user.id == comentario.usuario.id) || (locals.user.id == meeti.usuario.id)) { %>
-                                <input type="button" value="Eliminar" class="btn btn-azul"/>
+                                <!--  <input type="button" value="Eliminar" class="btn btn-azul"/>   -->
+                                <a class="btn btn-azul eliminar-comentario" href="/eliminar-comentario/<%- comentario.id %>">Eliminar</a>
                                 <% }  %>
                                 <p><%- moment(comentario.fecha).fromNow(); %></p>
                             </div>

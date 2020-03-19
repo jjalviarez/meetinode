@@ -30,6 +30,10 @@ exports.meetiPorURL =  async (req,res,next) => {
             }
         ]
     });
+    
+    if(!meeti) {
+        return next();
+    }
     const comentarios = await Comentarios.findAll({ 
         where: { 
             meetiId: meeti.id 
@@ -44,9 +48,6 @@ exports.meetiPorURL =  async (req,res,next) => {
                 ['fecha', 'DESC']
         ]
     });
-    if(!meeti) {
-        return next();
-    }
     res.render("meeti", {
         nombrePagina: 'Meeti',
         meeti,

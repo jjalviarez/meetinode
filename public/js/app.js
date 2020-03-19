@@ -1,5 +1,6 @@
 import {OpenStreetMapProvider} from 'leaflet-geosearch';
 import asistencia from './asistencia';
+import comentarios from './comentarios';
 //Se inicializa variables globales
 var  map;
 var markets;

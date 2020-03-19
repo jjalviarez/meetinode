@@ -63,7 +63,9 @@ module.exports = () => {
     //mostrar asistentes
     route.get('/asistentes/:slug',meetiControllerFE.meetiAsistentes);
     //Agregar Comentarios
-    route.post('/meeti/:id',  comentariosControllerFE.sanitizarComentario,comentariosControllerFE.agregarComentario);
+    route.post('/meeti/:id', authController.usuarioAutenticado, comentariosControllerFE.sanitizarComentario,comentariosControllerFE.agregarComentario);
+    route.delete('/eliminar-comentario/:id', authController.usuarioAutenticado, comentariosControllerFE.eliminarComentario);
+    
     
     
     //mostrar Usuario
