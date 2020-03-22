@@ -10,18 +10,27 @@
 <div class="buscador-inicio">
     <div class="contenedor">
         <h2>Busca un grupo en tu ciudad</h2>
-        <form action="#">
+        <form action="/busqueda" method='GET'>
             <select name="categoriaId">
-                <option value="" selected disabled>-- Selecciona Categoría --</option>
+                <option value="" selected >-- TODAS --</option>
                 <% if (categorias) { %>
                     <% categorias.forEach(categoria =>{ %>
                         <option value="<%- categoria.id %>"  >  <%-categoria.nombre %> </option>
                     <% }) %>
                 <% } %>
             </select>
-            <input type="text" name="nombre" placeholder="Nombre Meeti">
+            <input type="text" name="titulo" placeholder="Titulo Meeti">
             <input type="text" name="ciudad" placeholder="Ciudad">
-            <input type="text" name="pais" placeholder="País">
+            <select name="pais">
+                <option value="" selected>-- Todos --</option>
+                <option value="MEX">México</option>
+                <option value="COL">Colombia</option>
+                <option value="ARG">Argentina</option>
+                <option value="ESP">España</option>
+                <option value="USA">Estados Unidos</option>
+                <option value="PAN">Panama</option>
+                <option value="PER">Perú</option>
+            </select>
             <input type="submit" value="Buscar" class="btn btn-rosa">
         </form>
     </div>
@@ -31,32 +40,9 @@
     <h2>Próximos Meeti's</h2>
     <div class="grid columnas-md-3 ">
         <% if (meetis.length) { %>
-        <% moment.locale('es-us') %>
+            <% moment.locale('es-us') %>
             <% meetis.forEach(meeti =>{ %>
-                <div class="card">
-                    <% if (meeti.grupo.imagen) { %>
-                        <img src="/uploads/grupos/<%= meeti.grupo.imagen %>">
-                    <% } else {  %>
-                        <img src="/ing/meeti.jpg">
-                    <% }  %>
-                    <div class="card-texto">
-                        <p class="fecha"><%- moment(meeti.fecha + ' ' + meeti.hora).format('LLLL') %></p>
-                        <a href="/meeti/<%- meeti.slug %>">
-                            <h3><%- meeti.titulo %></h3>
-                        </a>
-                        <div class="info-autor">
-                            <div class="imagen">
-                                <% if (meeti.usuario.imagen) { %>
-                                        <img src='/uploads/perfil/<%= meeti.usuario.imagen %>'>
-                                 <% }  %>
-                            </div>
-                            <div class="informacion">
-                                <p>Organizado por:</p>
-                                <p class="autor"><%- meeti.usuario.nombre %></p>
-                            </div>
-                        </div>     
-                    </div>
-                </div>
+              <%-  include ('partials/card-meeti', { meeti }) %>  
             <% }) %> 
         <% } else { %>
             <p>No tienes ningun Meeti</p>

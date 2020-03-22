@@ -37,14 +37,19 @@ exports.meetiPorURL =  async (req,res,next) => {
     
     //meetis cercanos
     //El punto
-    const ubicacion = Sequelize.literal(`ST_GeoFromTex('POINT(${meeti.ubicacion.coordinates[0]} ${meeti.ubicacion.coordinates[1]})')`);
+    //const ubicacion = Sequelize.literal(`ST_GeogFromText('POINT(${meeti.ubicacion.coordinates[0]} ${meeti.ubicacion.coordinates[1]})')`);
+    const ubicacion = Sequelize.fn("ST_MakePoint", meeti.ubicacion.coordinates[0], meeti.ubicacion.coordinates[1]);
     //Las distancia
-    const distancia = Sequelize.fn('ST_Distance_Sphere', Sequelize.col('ubicacion'), ubicacion);
+    const distancia = Sequelize.fn("ST_Distance_Sphere", Sequelize.col('ubicacion'), ubicacion);
     //quey
     const cercanos =  await Meetis.findAll({ 
         order: distancia,
-        where: Sequelize.where(distancia, { [Op.lte]: 40000  }),  //40 kilometros
+        where: {
+            $and : Sequelize.where(distancia, { [Op.lte]: 40000  }),  //40 kilometros
+            fecha: { [Op.gte]: Date.now()  }
+        },
         limit: 3,
+        offset: 1,
         include: [
             {
                 model: Grupos
@@ -55,9 +60,6 @@ exports.meetiPorURL =  async (req,res,next) => {
             }
         ]
     });
-    
-    
-    console.log(cercanos); 
     
     const comentarios = await Comentarios.findAll({ 
         where: { 
@@ -77,6 +79,7 @@ exports.meetiPorURL =  async (req,res,next) => {
         nombrePagina: 'Meeti',
         meeti,
         comentarios,
+        cercanos,
         moment
     });
 };

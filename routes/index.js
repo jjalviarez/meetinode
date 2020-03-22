@@ -29,7 +29,8 @@ module.exports = () => {
 //--------------- Area Publica ----------------------------
      //Ruta de home
     route.get('/', homeController.home );
-
+    //Busqueda
+    route.get('/busqueda', homeController.resultado );
 
 
     //Crear Nueva Cuenta
@@ -67,6 +68,7 @@ module.exports = () => {
     //Agregar Comentarios
     route.post('/meeti/:id', authController.usuarioAutenticado, comentariosControllerFE.sanitizarComentario,comentariosControllerFE.agregarComentario);
     route.delete('/eliminar-comentario/:id', authController.usuarioAutenticado, comentariosControllerFE.eliminarComentario);
+    
     
     
     

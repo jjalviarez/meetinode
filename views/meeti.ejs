@@ -130,3 +130,14 @@
     </div>
 </main>
 
+<h2>Otros Meeti's Cercanos</h2>
+<div class="contenedor cercanos">
+    <% if (cercanos.length) { %>
+        <% moment.locale('es-us') %>
+        <% cercanos.forEach(meeti =>{ %>
+          <%-  include ('partials/card-meeti', { meeti }) %>  
+        <% }) %> 
+    <% } else { %>
+        <p>No tienes ningun Meeti cercano</p>
+    <% }  %>
+</div>
