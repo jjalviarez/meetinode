@@ -797,3 +797,26 @@ div.asistentes h1,
         flex: 1;
     }
 }
+
+
+/******* MAPA Meetis ******/
+
+@media (min-width:768px) {
+    .meeti-map{
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+    .meeti-map .listado-meeti {
+        flex: 0 0 20%;
+    }
+    .meeti-map .mapamittis{
+        flex: 0 0 80%;
+    }
+}
+
+.mapamittis {
+    padding: 0!important;
+    margin: 0!important;
+    height: 500px;
+}

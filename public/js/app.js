@@ -62,6 +62,27 @@ window.addEventListener('DOMContentLoaded', () => {
             .openPopup();
         
     }
+    
+    const mapamittis = document.querySelector('#mapamittis');
+    
+    if (mapamittis) {
+        
+        const ll = [document.querySelector('#lat').value,document.querySelector('#lng').value];
+        //Se inicializa el mapa y los marcadores
+        map = L.map('mapamittis').setView(ll, 13);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        
+        const meetis = document.querySelectorAll('ul.listado-meeti li');
+        meetis.forEach(meeti =>{ 
+        L.marker([meeti.children[1].value,meeti.children[2].value]).addTo(map)
+            .bindPopup(meeti.children[3].value)
+        });
+        
+        
+    }
 
     
 });

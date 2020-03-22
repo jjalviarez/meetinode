@@ -56,6 +56,8 @@ module.exports = () => {
 
     //Meeti por utl
     route.get('/meeti/:url',meetiControllerFE.meetiPorURL);
+    //Mapa Meeti
+    route.get('/meetis-map',meetiControllerFE.mapaMeeti);
     //Asistencia meeti
     route.post('/confirmar-asistencia/:slug',authController.usuarioAutenticado,meetiControllerFE.asistenciaMeeti);
     //mostrar meeti por categoria

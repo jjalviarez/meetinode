@@ -1,0 +1,32 @@
+
+<main class="contenedor">
+    <h1><%= nombrePagina%></h1>
+    <div class="meeti-map">
+        <% if (meetis.length || meetisPasados.length ) { %>
+            <input type="hidden" id="lat" value = '<%- ubicacion.ll[0] %>' readonly >
+            <input type="hidden" id="lng" value = '<%- ubicacion.ll[1] %>' readonly >
+            <ul class="listado-meeti">
+                <% meetis.forEach(meeti =>{ %>
+                    <li>
+                        <p><a href="/meeti/<%- meeti.slug %>"><%- meeti.titulo %></a></p>
+                        <input type="hidden" value = '<%- meeti.ubicacion.coordinates[0] %>' readonly >
+                        <input type="hidden" value = '<%- meeti.ubicacion.coordinates[1] %>' readonly >
+                        <input type="hidden" value = '<%- meeti.titulo +', '+ meeti.direccion +', '+ meeti.ciudad + ', ' + meeti.estado + ', ' +  meeti.pais %>' readonly >
+                    </li>
+                <% }) %> 
+                <% meetisPasados.forEach(meeti =>{ %>
+                    <li>
+                        <p><a href="/meeti/<%- meeti.slug %>"><%- meeti.titulo %></a></p>
+                        <input type="hidden" value = '<%- meeti.ubicacion.coordinates[0] %>' readonly >
+                        <input type="hidden" value = '<%- meeti.ubicacion.coordinates[1] %>' readonly >
+                        <input type="hidden" value = '<%- meeti.titulo +', '+ meeti.direccion +', '+ meeti.ciudad + ', ' + meeti.estado + ', ' +  meeti.pais %>' readonly >
+                    </li>
+                <% }) %> 
+            </ul>
+        <% } else { %>
+            <p class="no-asistentes">No tienes ningun Meeti</p>
+        <% }  %>    
+        <div class="mapamittis" id="mapamittis" >
+        </div>
+    </div>
+</main>

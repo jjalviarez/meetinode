@@ -8,7 +8,7 @@ const Categorias = require("../../models/Categorias");
 const Sequelize = require('sequelize');
 const moment = require('moment');
 const {Op} = require("sequelize");
-
+var geoip = require('geoip-lite');
 
 
 
@@ -34,6 +34,31 @@ exports.meetiPorURL =  async (req,res,next) => {
     if(!meeti) {
         return next();
     }
+    
+    //meetis cercanos
+    //El punto
+    const ubicacion = Sequelize.literal(`ST_GeoFromTex('POINT(${meeti.ubicacion.coordinates[0]} ${meeti.ubicacion.coordinates[1]})')`);
+    //Las distancia
+    const distancia = Sequelize.fn('ST_Distance_Sphere', Sequelize.col('ubicacion'), ubicacion);
+    //quey
+    const cercanos =  await Meetis.findAll({ 
+        order: distancia,
+        where: Sequelize.where(distancia, { [Op.lte]: 40000  }),  //40 kilometros
+        limit: 3,
+        include: [
+            {
+                model: Grupos
+            },
+            {
+                model: Usuarios,
+                attributes: ['id','nombre','imagen'],
+            }
+        ]
+    });
+    
+    
+    console.log(cercanos); 
+    
     const comentarios = await Comentarios.findAll({ 
         where: { 
             meetiId: meeti.id 
@@ -161,7 +186,47 @@ exports.meetiPorCategoria =  async (req,res,next) => {
 
 
 
+exports.mapaMeeti = async (req,res) =>{
+    
+        const ip = req.ip;
+    var geo = geoip.lookup(ip);    
+    const ubicacion =  geo ? geo : { ll : [ 8.991048919136528, -79.52132348174077 ] };
+    
+    const meetisPromise =  Meetis.findAll({
+                where: {
+                        fecha: { [Op.gte]: Date.now()  }
+                         
+                },
+                order: [
+                        ['fecha', 'ASC']
+                ]
+        });
+    const meetisPasadosPromise = await Meetis.findAll({
+                where: {
+                        fecha: { [Op.lt]: Date.now()  }
+                         
+                },
+                order: [
+                        ['fecha', 'DESC']
+                ]
+        });
+    const [meetis,meetisPasados] = await Promise.all([meetisPromise,meetisPasadosPromise]);
+    /*
+    meetis.forEach(meeti =>{
+        console.log('------------------');
+        console.log(meeti);
+    });
+    */
+    //console.log(meetis);
+    res.render("mapaMeeti", {
+        nombrePagina: 'Mapa de Meetis',
+        meetis,
+        meetisPasados,
+        ubicacion,
+        moment
+    });
 
+};
 
 
 
