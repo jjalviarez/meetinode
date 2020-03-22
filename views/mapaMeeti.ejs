@@ -3,8 +3,6 @@
     <h1><%= nombrePagina%></h1>
     <div class="meeti-map">
         <% if (meetis.length || meetisPasados.length ) { %>
-            <input type="hidden" id="lat" value = '<%- ubicacion.ll[0] %>' readonly >
-            <input type="hidden" id="lng" value = '<%- ubicacion.ll[1] %>' readonly >
             <ul class="listado-meeti">
                 <% meetis.forEach(meeti =>{ %>
                     <li>
@@ -25,7 +23,9 @@
             </ul>
         <% } else { %>
             <p class="no-asistentes">No tienes ningun Meeti</p>
-        <% }  %>    
+        <% }  %> 
+        <input type="hidden" id="lat" value = '<%- ubicacion.ll[0] %>' readonly >
+        <input type="hidden" id="lng" value = '<%- ubicacion.ll[1] %>' readonly >   
         <div class="mapamittis" id="mapamittis" >
         </div>
     </div>
